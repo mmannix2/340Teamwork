@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
     ifstream weightsFile;
-    char* weightsFileName = "weightsFile.bin";
+    string weightsFileName = "weightsFile.bin";
     //ifstream encodedFile;
     
     //Get name of weightsFileName
@@ -21,19 +21,23 @@ int main() {
     int weight;
 
     string tmp;		// holds a line in weights file 
-    stringstream ss;
+    stringstream ss;        // Using to convert string to int
     while(getline(weightsFile, tmp)) {
-   	c = tmp.substr(0,1); 	
+        c = tmp.substr(0,1); 	
 
-	ss << tmp.substr(2);
-	ss >> weight;
+        /* Convert string to int */
+        ss << tmp.substr(2);
+        ss >> weight;
 
-	ss.str("");
-	ss.clear();
+        /* Clean out the buffer */
+        ss.str("");
+        ss.clear();
 
-	cout << c << endl;
-	cout << weight << endl;
-	cout << endl;
+        cout << c << endl;
+        cout << weight << endl;
+        cout << endl;
+
+        /* make trees here */
     }
 
     //Close weightsFile
