@@ -43,14 +43,29 @@ public:
             //Set newNode as root's right child
             cout << "\tAdding node right of root.\n";
             root->setRight( &newNode );
-            //Change root's key
-            root->setKey(newNode.getKey());
+            //Change root's key to the sum of its children's keys.
+            root->setKey(root->getLeft()->getKey() + newNode.getKey());
         }
     }
     
     void print() {
-        cout << "root key: " << root->getKey() << endl;
-        cout << "root data: " << root->getData() << endl;
+        //TODO Fix print().
+        BinaryNode<int, char>* temp = root;
+        while(temp->getLeft()->isLeaf()) {
+            //Print right child
+            cout << "Weight: " << temp->getRight()->getKey() << endl;
+            cout << "Char: " << temp->getRight()->getData() << endl;
+            //Move temp
+            temp = temp->getLeft();
+        }
+        if(temp->getLeft() != NULL) {
+            //Print left child
+            cout << "Weight: " << temp->getRight()->getKey() << endl;
+            cout << "Char: " << temp->getRight()->getData() << endl;
+        }
+
+        //cout << "root key: " << root->getKey() << endl;
+        //cout << "root data: " << root->getData() << endl;
     }
 };
 #endif
