@@ -5,6 +5,9 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+
+#include "HuffmanTree.h"
+#include "BinaryNode.h"
 using namespace std;
 
 int main() {
@@ -17,13 +20,16 @@ int main() {
     //Open weightsFile
     weightsFile.open( weightsFileName, std::ifstream::in );
     
-    string c; 		// TODO change back to a char?
+    char c; 		
     int weight;
 
     string tmp;		// holds a line in weights file 
     stringstream ss;        // Using to convert string to int
+
+    HuffmanTree tree = HuffmanTree();
+    
     while(getline(weightsFile, tmp)) {
-        c = tmp.substr(0,1); 	
+        c = tmp.at(0); 	
 
         /* Convert string to int */
         ss << tmp.substr(2);
@@ -33,12 +39,16 @@ int main() {
         ss.str("");
         ss.clear();
 
-        cout << c << endl;
-        cout << weight << endl;
-        cout << endl;
+        /* Debug
+            cout << c << endl;
+            cout << weight << endl;
+            cout << endl;
+        */
 
-        /* make trees here */
+        tree.insert(weight, c);
     }
+
+    tree.print();
 
     //Close weightsFile
     weightsFile.close();
