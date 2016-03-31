@@ -9,19 +9,19 @@ using namespace std;
 
 class HuffmanTree {
 private:
-    BinaryNode<int, char>* root;
+    BinaryNode<double, char>* root;
 
 public:
     HuffmanTree(){
         root = NULL;
     }
     
-    void insert(const Key& k, const T& d) {
+    void insert(const double& k, const char& d) {
         //Make a new BinaryNode
-        BinaryNode newNode = BinaryNode(k, d);
+        BinaryNode<double, char> newNode = BinaryNode<double, char>(k, d);
         //Insert newNode
         if(root == NULL) {
-            root = newNode;
+            root = &newNode;
         }
         else {
         }
