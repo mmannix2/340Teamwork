@@ -36,16 +36,16 @@ public:
     }
     
     //Child BinaryNode setters & getters
-    void setLeft(BinaryNode l) {
+    void setLeft(BinaryNode* l) {
         left = l;
     }
-    BinaryNode getLeft() {
+    BinaryNode* getLeft() {
         return left;
     }
-    void setRight(BinaryNode r) {
+    void setRight(BinaryNode* r) {
         right = r;
     }
-    BinaryNode getRight() {
+    BinaryNode* getRight() {
         return right;
     }
     
