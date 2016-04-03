@@ -41,7 +41,7 @@ public:
     void setKey(Key k) {
         key = k;
     }
-    T getKey() {
+    Key getKey() {
         return key;
     }
     void setData(T d) {
