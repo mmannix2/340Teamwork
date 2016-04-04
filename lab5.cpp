@@ -1,5 +1,4 @@
 /* Compression and Decompression using Huffman Codes */
-
 #include <string>
 #include <fstream>
 #include <sstream>
