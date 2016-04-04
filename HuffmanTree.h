@@ -17,31 +17,41 @@ public:
     }
     
     void insert(const int& k, const char& d) {
+        #ifdef DEBUG
         cout << "Inserting " << d << ".\n";
+        #endif
         //Make a new BinaryNode
         BinaryNode<int, char> newNode = BinaryNode<int, char>(k, d);
         BinaryNode<int, char>* tempNode;
         //Insert newNode
         if(root->getKey() == 0) {
+            #ifdef DEBUG
             cout << "\tTree is empty.\n";
             cout << "\tAdding node left of root.\n";
+            #endif
             //Set newNode as root's left child
             root->setLeft( &newNode );
             //Change root's key
             root->setKey(newNode.getKey());
         }
         else {
+            #ifdef DEBUG
             cout << "\tTree is not empty.\n";
+            #endif
             //If root's right child is empty
             if(root->getRight() != NULL) {
+                #ifdef DEBUG
                 cout << "\tCreating new Node.\n";
+                #endif
                 //Make a new node
                 tempNode = new BinaryNode<int, char>(0, '\0');
                 tempNode->setLeft(root);
                 root = tempNode;
             }
             //Set newNode as root's right child
+            #ifdef DEBUG
             cout << "\tAdding node right of root.\n";
+            #endif
             root->setRight( &newNode );
             //Change root's key to the sum of its children's keys.
             root->setKey(root->getLeft()->getKey() + newNode.getKey());
