@@ -46,6 +46,7 @@ int main() {
         */
 
         tree.insert(weight, c);
+
     }
 
     tree.print();
