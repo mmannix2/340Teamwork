@@ -1,0 +1,11 @@
+if(tree empty)
+    if(root has left)
+        if(newnode 
+    add newnode to the left
+    nodeCount ++ 
+else if(newnode->value >= root->left->value) || nodeCount >= 2
+    add newnode to the right
+    root->right = newnode
+
+    root-> value = root->left->value + root->right->value;
+else if(newnode->value < root->value

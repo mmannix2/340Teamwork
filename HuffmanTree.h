@@ -10,12 +10,20 @@ using namespace std;
 class HuffmanTree {
 private:
     BinaryNode<int, char>* root;
+    int nodeCount;
 
 public:
     HuffmanTree(){
         root = new BinaryNode<int, char>(0, '\0');
+        nodeCount = 1;
     }
     
+    /* Stages the leaves before adding them to tree */
+    void addLeaves(const int& k, const char& d) {
+
+
+    }
+
     void insert(const int& k, const char& d) {
         #ifdef DEBUG
         cout << "Inserting " << d << " with weight " << k << ".\n";
@@ -23,30 +31,33 @@ public:
         //Make a new BinaryNode
         BinaryNode<int, char> newNode = BinaryNode<int, char>(k, d);
         BinaryNode<int, char>* tempNode;
+
         //Insert newNode
         if(root->getKey() == 0) {
             #ifdef DEBUG
             cout << "\tTree is empty.\n";
             cout << "\tAdding node left of root.\n";
             #endif
-            //Set newNode as root's left child
-            root->setLeft( &newNode );
-            //Change root's key
-            root->setKey(newNode.getKey());
+
+            root->setLeft( &newNode );               //Set newNode as root's left child
+            root->setKey(newNode.getKey());          //Change root's key
+
         } else {
             #ifdef DEBUG
             cout << "\tTree is not empty.\n";
             #endif
-            //If root's right child is empty
+
+            /* If root's right child isn't empty */
             if(root->getRight() != NULL) {
                 #ifdef DEBUG
                 cout << "\tCreating new Node.\n";
                 #endif
-                //Make a new node
-                tempNode = new BinaryNode<int, char>(0, '\0');
+
+                tempNode = new BinaryNode<int, char>(0, '\0');       //Make a new node
                 tempNode->setLeft(root);
                 root = tempNode;
             }
+
             //Set newNode as root's right child
             #ifdef DEBUG
             cout << "\tAdding node right of root.\n";
@@ -55,6 +66,11 @@ public:
             //Change root's key to the sum of its children's keys.
             root->setKey(root->getLeft()->getKey() + newNode.getKey());
         }
+
+        //TODO Add some sort error exception for
+        // weights that exceed 100 weightsFileError?
+
+        nodeCount++;
     }
     
     void print() {
@@ -76,6 +92,10 @@ public:
 
         //cout << "root key: " << root->getKey() << endl;
         //cout << "root data: " << root->getData() << endl;
+    }
+
+    int getSize() {
+        return nodeCount;
     }
 };
 #endif

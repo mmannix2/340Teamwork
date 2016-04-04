@@ -28,6 +28,7 @@ int main() {
     
     /* Build the tree */
     tree = buildTree(fileName);
+    tree.print();
     
     /* Get the next fileName  */
     cout << "Please enter the name of the file to encode or decode: ";
@@ -85,6 +86,7 @@ HuffmanTree buildTree( string weightsFileName ) {
     }
     //Close weightsFile
     weightsFile.close();
+    cout << "Tree size: " <<  tree.getSize() << endl;
     
     return tree;
 }
