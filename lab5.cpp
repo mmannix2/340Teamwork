@@ -1,4 +1,6 @@
 /* Compression and Decompression using Huffman Codes */
+#define DEBUG
+
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -33,15 +35,20 @@ int main() {
     cout << "\n";
     
     /* encode or decode the new file*/
-    /*
-    //I don't know a good way to determine if the new file is encoded or not.
-    if() { //If new file is plain text
-        encode(fileName)
+    /* I don't know a good way to determine if the new file is encoded or not.
+       so I am assuming an encoded file will end with .enc */
+    if(getFileExt(fileName)=="enc") { //If new file is encoded
+        #ifdef DEBUG
+        cout << "Decoding " << fileName << ".\n";
+        #endif
+        //decode(fileName)
     }
-    else if() { //If file is encoded
-        decode(fileName);
+    else { //file is plain text
+        #ifdef DEBUG
+        cout << "Encoding " << fileName << ".\n";
+        #endif
+        encode(fileName);
     }
-    */
 
     return 0;
 }
@@ -82,11 +89,24 @@ HuffmanTree buildTree( string weightsFileName ) {
 }
 
 void encode(string fileName) {
+    //TODO turn plain text into encoded binary. Right now it just reads the
+    //input in and stores it into a .enc file
     ifstream inFile;
-    inFile.open(fileName.c_str());
+    ofstream outFile;
+    string outFileName = fileName + ".enc";
+    char thisChar;
     
-    //TODO turn plain text into encoded binary
-    //This will write to a file.
+    /* Open the files */
+    inFile.open(fileName.c_str());
+    outFile.open(outFileName.c_str(), std::ofstream::out);
+
+    while(inFile.good()) {
+        thisChar = inFile.get();
+        //Convert thisChar to binary
+        outFile << thisChar;
+    }
+    outFile << "\n";
+    outFile.close();
 }
 
 void decode(string fileName) {
