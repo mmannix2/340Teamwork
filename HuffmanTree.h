@@ -3,6 +3,7 @@
 #define _HUFFMANTREE_H_INCLUDED
 
 #include <iostream>
+#include <typeinfo>
 using namespace std;
 
 #include "BinaryNode.h"
@@ -11,16 +12,33 @@ class HuffmanTree {
 private:
     BinaryNode<int, char>* root;
     int nodeCount;
+    int leafCount;
+    BinaryNode<int, char>* nodes;
+    BinaryNode<int, char>* tmpLeaf;
+
 
 public:
-    HuffmanTree(){
+    HuffmanTree(int totalLeaves){
         root = new BinaryNode<int, char>(0, '\0');
+        nodes = new BinaryNode<int, char>[totalLeaves];
         nodeCount = 1;
+        leafCount = 0;
     }
     
     /* Stages the leaves before adding them to tree */
-    void addLeaves(const int& k, const char& d) {
+    void addLeaf(const int& k, const char& d) {
+        tmpLeaf = new BinaryNode<int,char>(k,d);
+        cout << "Leaves: " << leafCount << endl;
+        cout << tmpLeaf << endl;
+        nodes[leafCount] = *tmpLeaf; 
+        leafCount++;
 
+        return;
+    }
+
+
+    /* Sorts all the nodes */
+    void sortNodes() {
 
     }
 

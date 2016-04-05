@@ -37,6 +37,12 @@ public:
         right = NULL;
     }
 
+    /* Default constructor for making an array */
+    BinaryNode() {
+        left = NULL;
+        right = NULL;
+    }
+
     //key and data setters & getters
     void setKey(Key k) {
         key = k;

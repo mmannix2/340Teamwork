@@ -18,7 +18,6 @@ string getFileExt( string );
 
 int main() {
     string fileName;
-    HuffmanTree tree;
     ofstream outFile;
 
     /* Get fileName */
@@ -27,7 +26,7 @@ int main() {
     cout << "\n";
     
     /* Build the tree */
-    tree = buildTree(fileName);
+    HuffmanTree tree = buildTree(fileName);
     tree.print();
     
     /* Get the next fileName  */
@@ -56,12 +55,14 @@ int main() {
 
 HuffmanTree buildTree( string weightsFileName ) {
     ifstream weightsFile;
-    HuffmanTree tree = HuffmanTree();
+    HuffmanTree tree = HuffmanTree(5);
     
     string tmp;		// holds a line in weights file 
     stringstream ss;    // Using to convert string to int
     char c; 		
     int weight;
+
+    // TODO add some line counter thing
     
     /* Open weightsFile */
     weightsFile.open( weightsFileName.c_str() ); 
