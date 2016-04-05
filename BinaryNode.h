@@ -1,4 +1,9 @@
-/* A Node to be used within a Binary Tree */
+/* CPSC 340
+ * Lab #5 - BinaryNode.h
+ * A Node to be used within a Binary Tree
+ * Robert Blake
+ * Matthew Mannix
+ */
 #ifndef _BINARYNODE_H_INCLUDED
 #define _BINARYNODE_H_INCLUDED
 

@@ -1,4 +1,10 @@
-/* A binary tree used for Huffman Encoding */
+/* CPSC 340
+ * Lab #5 - HuffmanTree.h
+ * A binary tree used for Huffman Encoding
+ * Robert Blake
+ * Matthew Mannix
+ */
+
 #ifndef _HUFFMANTREE_H_INCLUDED
 #define _HUFFMANTREE_H_INCLUDED
 

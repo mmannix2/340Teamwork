@@ -1,4 +1,10 @@
-/* Compression and Decompression using Huffman Codes */
+/* CPSC 340
+ * Lab #5 - BinaryNode.h
+ * Compression and Decompression using Huffman Codes
+ * A Node to be used within a Binary Tree
+ * Robert Blake
+ * Matthew Mannix
+ */
 #define DEBUG
 
 #include <string>
