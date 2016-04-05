@@ -20,7 +20,9 @@ private:
 
 public:
     /* Method Prototypes I guess
-     
+        I don't think we need prototypes because this is a header file so
+        everything is declared inline implicitly. I think... -Matt
+
         BinaryNode(Key, T);
         void setKey(Key);
         T getKey();

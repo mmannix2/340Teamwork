@@ -21,6 +21,7 @@ HuffmanTree buildTree( string );
 void encode( string );
 void decode( string );
 string getFileExt( string );
+string getFileBasename( string );
 
 int main() {
     string fileName;
@@ -47,7 +48,7 @@ int main() {
         #ifdef DEBUG
         cout << "Decoding " << fileName << ".\n";
         #endif
-        //decode(fileName)
+        //decode(fileName);
     }
     else { //file is plain text
         #ifdef DEBUG
@@ -100,7 +101,7 @@ void encode(string fileName) {
     //input in and stores it into a .enc file
     ifstream inFile;
     ofstream outFile;
-    string outFileName = fileName + ".enc";
+    string outFileName = getFileBasename(fileName) + ".enc";
     char thisChar;
     
     /* Open the files */
@@ -112,7 +113,7 @@ void encode(string fileName) {
         //Convert thisChar to binary
         outFile << thisChar;
     }
-    outFile << "\n";
+    //outFile << "\n";
     outFile.close();
 }
 
@@ -128,4 +129,14 @@ string getFileExt(string fileName) {
     if(fileName.find_last_of(".") != string::npos)
         return fileName.substr(fileName.find_last_of(".")+1);
     return "";
+}
+
+string getFileBasename(string fileName) {
+    //If fileName has an extension
+    if(fileName.find_last_of(".") != string::npos) {
+        return fileName.substr(0, fileName.find_last_of("."));
+    }
+    else {
+        return fileName;
+    }
 }
