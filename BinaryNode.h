@@ -46,7 +46,7 @@ public:
     void setKey(Key k) {
         key = k;
     }
-    T getKey() {
+    Key getKey() {
         return key;
     }
     void setData(T d) {
@@ -70,7 +70,8 @@ public:
         return right;
     }
     
-    //Other functions
+    /* Returns TRUE if both left and right
+     * nodes are NULL, otherwise FALSE */
     bool isLeaf() {
         return ( (right==NULL) && (left==NULL) );
     }

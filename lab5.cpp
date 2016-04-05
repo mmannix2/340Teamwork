@@ -87,6 +87,7 @@ HuffmanTree buildTree( string weightsFileName ) {
         ss.clear();
         
         tree.insert(weight, c);
+
     }
     //Close weightsFile
     weightsFile.close();

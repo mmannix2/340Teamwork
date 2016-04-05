@@ -19,12 +19,12 @@ private:
 
 public:
     HuffmanTree(){
-        root = new BinaryNode<int, char>(0, NULL);
+        root = new BinaryNode<int, char>(0, '\0');
     }
     
     void insert(const int& k, const char& d) {
         #ifdef DEBUG
-        cout << "Inserting " << d << ".\n";
+        cout << "Inserting " << d << " with weight " << k << ".\n";
         #endif
         //Make a new BinaryNode
         BinaryNode<int, char> newNode = BinaryNode<int, char>(k, d);
@@ -39,8 +39,7 @@ public:
             root->setLeft( &newNode );
             //Change root's key
             root->setKey(newNode.getKey());
-        }
-        else {
+        } else {
             #ifdef DEBUG
             cout << "\tTree is not empty.\n";
             #endif
@@ -74,10 +73,11 @@ public:
             //Move temp
             temp = temp->getLeft();
         }
+
         if(temp->getLeft() != NULL) {
             //Print left child
-            cout << "Weight: " << temp->getRight()->getKey() << endl;
-            cout << "Char: " << temp->getRight()->getData() << endl;
+            cout << "Weight: " << temp->getLeft()->getKey() << endl;
+            cout << "Char: " << temp->getLeft()->getData() << endl;
         }
 
         //cout << "root key: " << root->getKey() << endl;
