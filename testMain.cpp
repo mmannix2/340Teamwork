@@ -27,7 +27,7 @@ int main() {
     
     /* Build the tree */
     HuffmanTree tree = buildTree(fileName);
-    tree.print();
+    //tree.print();
     
     return 0;
 }
@@ -62,8 +62,9 @@ HuffmanTree buildTree( string weightsFileName ) {
         ss.clear();
         
         tree.addLeaf(weight, c);
-
     }
+
+    cout << "Done adding leaves" << endl;
     //Close weightsFile
     weightsFile.close();
     cout << "Tree size: " <<  tree.getSize() << endl;

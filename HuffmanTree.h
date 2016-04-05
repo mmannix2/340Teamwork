@@ -9,28 +9,40 @@ using namespace std;
 #include "BinaryNode.h"
 
 class HuffmanTree {
+
+    struct leaf {
+        int weight;
+        char tag;
+    };
+
 private:
     BinaryNode<int, char>* root;
     int nodeCount;
     int leafCount;
-    BinaryNode<int, char>* nodes;
-    BinaryNode<int, char>* tmpLeaf;
+    leaf * leaves;
 
 
 public:
     HuffmanTree(int totalLeaves){
         root = new BinaryNode<int, char>(0, '\0');
-        nodes = new BinaryNode<int, char>[totalLeaves];
+        leaves = new leaf[totalLeaves];
         nodeCount = 1;
         leafCount = 0;
     }
     
     /* Stages the leaves before adding them to tree */
     void addLeaf(const int& k, const char& d) {
-        tmpLeaf = new BinaryNode<int,char>(k,d);
+        
+        leaf * tmpLeaf = new leaf;
+        tmpLeaf->weight = k;
+        tmpLeaf->tag = d;
+
+        leaves[leafCount] = *tmpLeaf;
+
+#ifdef DEBUG
         cout << "Leaves: " << leafCount << endl;
         cout << tmpLeaf << endl;
-        nodes[leafCount] = *tmpLeaf; 
+#endif
         leafCount++;
 
         return;
@@ -39,6 +51,18 @@ public:
 
     /* Sorts all the nodes */
     void sortNodes() {
+        leaf temp;
+        /* assume first one is sorted, i starts at 1 */
+        for(int i=1; i < leafCount; i++) {
+            for(int j=i; j > 0; j--) {
+                if(leaves[j].weight < leaves[j-1].weight) {
+                    /* swap the values */
+                    temp = leaves[j];
+                    leaves[j] = leaves[j-1];
+                    leaves[j-1] = temp;
+                }
+            }
+        }
 
     }
 
