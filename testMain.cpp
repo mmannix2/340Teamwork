@@ -8,6 +8,7 @@
 
 #include "HuffmanTree.h"
 #include "BinaryNode.h"
+#include "queue.h"
 using namespace std;
 
 /* Function Prototypes */

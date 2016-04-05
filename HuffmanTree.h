@@ -19,13 +19,13 @@ private:
     BinaryNode<int, char>* root;
     int nodeCount;
     int leafCount;
-    leaf * leaves;
+    Queue<BinaryNode<int,char>> nodes;
 
 
 public:
     HuffmanTree(int totalLeaves){
         root = new BinaryNode<int, char>(0, '\0');
-        leaves = new leaf[totalLeaves];
+        nodes = 
         nodeCount = 1;
         leafCount = 0;
     }
@@ -33,15 +33,15 @@ public:
     /* Stages the leaves before adding them to tree */
     void addLeaf(const int& k, const char& d) {
         
-        leaf * tmpLeaf = new leaf;
-        tmpLeaf->weight = k;
-        tmpLeaf->tag = d;
+        BinaryNode<int, char> * tmpNode = new BinaryNode<int, char>;
+        nodes -> key = k;
+        nodes -> data = d;
 
-        leaves[leafCount] = *tmpLeaf;
+        nodes[leafCount] = tmpNode;
 
 #ifdef DEBUG
         cout << "Leaves: " << leafCount << endl;
-        cout << tmpLeaf << endl;
+        cout << tmpNode << endl;
 #endif
         leafCount++;
 
@@ -51,19 +51,18 @@ public:
 
     /* Sorts all the nodes */
     void sortNodes() {
-        leaf temp;
+        BinaryNode<int, char> * temp;
         /* assume first one is sorted, i starts at 1 */
         for(int i=1; i < leafCount; i++) {
             for(int j=i; j > 0; j--) {
-                if(leaves[j].weight < leaves[j-1].weight) {
+                if(nodes[j].key < nodes[j-1].key) {
                     /* swap the values */
-                    temp = leaves[j];
-                    leaves[j] = leaves[j-1];
-                    leaves[j-1] = temp;
+                    temp = nodes[j];
+                    nodes[j] = nodes[j-1];
+                    nodes[j-1] = temp;
                 }
             }
         }
-
     }
 
     void insert(const int& k, const char& d) {
