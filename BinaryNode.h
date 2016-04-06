@@ -14,22 +14,6 @@ private:
     BinaryNode* right;
 
 public:
-    /* Method Prototypes I guess
-     
-        BinaryNode(Key, T);
-        void setKey(Key);
-        T getKey();
-        void setData(T);
-        T getData();
-
-        void setLeft(BinaryNode*);
-        BinaryNode* getLeft();
-        void setRight(BinaryNode*);
-        BinaryNode* getRight();
-        bool isLeaf();
-    */
-
-
     BinaryNode(Key k, T d) {
         key = k;
         data = d;

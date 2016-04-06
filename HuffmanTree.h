@@ -4,33 +4,72 @@
 
 #include <iostream>
 #include <typeinfo>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 #include "BinaryNode.h"
+//#include "queue.h"
+#include "Queue.h"
 
 class HuffmanTree {
 
+/*
     struct leaf {
         int weight;
         char tag;
     };
+*/
 
 private:
     BinaryNode<int, char>* root;
     int nodeCount;
     int leafCount;
-    Queue<BinaryNode<int,char>> nodes;
-
+    Queue< BinaryNode<int,char> > nodes;
 
 public:
     HuffmanTree(int totalLeaves){
         root = new BinaryNode<int, char>(0, '\0');
-        nodes = 
+        //nodes = ; 
         nodeCount = 1;
         leafCount = 0;
     }
     
+    HuffmanTree(string fileName) {
+        ifstream inFile;
+        inFile.open(fileName.c_str());
+
+        nodes = Queue< BinaryNode<int, char> >();
+        string temp;
+        stringstream ss;
+        
+        while(getline(inFile, temp)) {
+            char character = temp.at(0);
+            int weight;
+            ss << temp.substr(2);
+            ss >> weight;
+
+            nodes.push(BinaryNode<int, char>(weight, character));
+            
+            ss.clear();
+        }
+
+        cout << "Nodes have been read in.\n";
+        
+        sortQueue(nodes);
+        
+        //Add nodes to tree
+        for(int i=0; i<nodes.get_size(); i++) {
+            cout << "Node " << i+1 << ": " << nodes.pop().getData() << "\n";
+        }
+    }
+    
+    void sortQueue(const Queue< BinaryNode<int, char> >& queue) {
+        cout << "Sorting...\n";
+    }
+    
     /* Stages the leaves before adding them to tree */
+    /*
     void addLeaf(const int& k, const char& d) {
         
         BinaryNode<int, char> * tmpNode = new BinaryNode<int, char>;
@@ -47,16 +86,21 @@ public:
 
         return;
     }
-
+    */
 
     /* Sorts all the nodes */
+    /*
     void sortNodes() {
         BinaryNode<int, char> * temp;
+        */
         /* assume first one is sorted, i starts at 1 */
+        /*
         for(int i=1; i < leafCount; i++) {
             for(int j=i; j > 0; j--) {
                 if(nodes[j].key < nodes[j-1].key) {
+                    */
                     /* swap the values */
+                    /*
                     temp = nodes[j];
                     nodes[j] = nodes[j-1];
                     nodes[j-1] = temp;
@@ -64,6 +108,7 @@ public:
             }
         }
     }
+    */
 
     void insert(const int& k, const char& d) {
         #ifdef DEBUG
@@ -80,8 +125,8 @@ public:
             cout << "\tAdding node left of root.\n";
             #endif
 
-            root->setLeft( &newNode );               //Set newNode as root's left child
-            root->setKey(newNode.getKey());          //Change root's key
+            root->setLeft( &newNode );      //Set newNode as root's left child
+            root->setKey(newNode.getKey()); //Change root's key
 
         } else {
             #ifdef DEBUG
@@ -94,7 +139,7 @@ public:
                 cout << "\tCreating new Node.\n";
                 #endif
 
-                tempNode = new BinaryNode<int, char>(0, '\0');       //Make a new node
+                tempNode = new BinaryNode<int, char>(0, '\0');  //Make a new node
                 tempNode->setLeft(root);
                 root = tempNode;
             }

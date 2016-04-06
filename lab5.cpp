@@ -8,10 +8,11 @@
 
 #include "HuffmanTree.h"
 #include "BinaryNode.h"
+#include "queue.h"
 using namespace std;
 
 /* Function Prototypes */
-HuffmanTree buildTree( string );
+//HuffmanTree buildTree( string );
 void encode( string );
 void decode( string );
 string getFileExt( string );
@@ -19,14 +20,16 @@ string getFileExt( string );
 int main() {
     string fileName;
     ofstream outFile;
-
+    //HuffmanTree tree;
+    
     /* Get fileName */
     cout << "Please enter the name of the weights file: ";
     getline(cin, fileName);
     cout << "\n";
     
     /* Build the tree */
-    HuffmanTree tree = buildTree(fileName);
+    HuffmanTree tree = HuffmanTree(fileName);
+    
     tree.print();
     
     /* Get the next fileName  */
@@ -125,4 +128,14 @@ string getFileExt(string fileName) {
     if(fileName.find_last_of(".") != string::npos)
         return fileName.substr(fileName.find_last_of(".")+1);
     return "";
+}
+
+string getFileBasename(string fileName) {
+    //If fileName has an extension
+    if(fileName.find_last_of(".") != string::npos) {
+        return fileName.substr(0, fileName.find_last_of("."));
+    }
+    else {
+        return fileName;
+    }
 }

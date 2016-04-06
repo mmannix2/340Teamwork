@@ -4,7 +4,8 @@
  *
  * Implementation of a doubly-linked list queue
  */
-
+#ifndef _QUEUE_H_INCLUDED
+#define _QUEUE_H_INCLUDED
 #include <string>
 
 using namespace std;
@@ -135,6 +136,4 @@ template <class T>
 void Queue<T>::reverse() {
     /* this one is gonna be dope */
 }
-
-
-
+#endif
