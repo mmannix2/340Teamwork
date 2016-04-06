@@ -9,8 +9,7 @@
 using namespace std;
 
 #include "BinaryNode.h"
-//#include "queue.h"
-#include "Queue.h"
+#include "queue.h"
 
 class HuffmanTree {
 
