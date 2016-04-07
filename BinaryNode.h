@@ -36,7 +36,7 @@ public:
         left = NULL;
         right = NULL;
     }
-
+    
     /* Default constructor for making an array */
     BinaryNode() {
         left = NULL;
