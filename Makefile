@@ -3,7 +3,7 @@ CC = g++
 DEBUG = -g
 CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
-DEPS = HuffmanTree.h BinaryNode.h queue.h
+DEPS = include/HuffmanTree.h include/BinaryNode.h
 
 lab5 : $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o executable

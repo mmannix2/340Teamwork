@@ -10,7 +10,6 @@
 using namespace std;
 
 #include "BinaryNode.h"
-#include "queue.h"
 
 class HuffmanTree {
 
@@ -66,17 +65,17 @@ public:
             leafCount++;
         }
         
-        cout << "numNodes: " << nodes.size() << "\n";
+        cout << "numNodes: " << (int)(nodes.size()) << "\n";
 
         // Combine nodes into tree
-        while( nodes.size() > 1) {
-            cout << "numNodes: " << nodes.size() << "\n";
+        while( (int)(nodes.size()) > 1) {
+            cout << "numNodes: " << (int)(nodes.size()) << "\n";
             
             int smallest = 0;
             int nextSmallest = 0;
             
             // Find smallest node
-            for( int i=1; i < nodes.size(); i++) {
+            for( int i=1; i < (int)(nodes.size()); i++) {
                 cout << "Node " << i+1 << ": " << nodes.at(i).getData() << "\n"; 
                 // Find the smallest node by key (weight)
                 if( nodes.at(i).getKey() < nodes.at(smallest).getKey()) {
@@ -91,7 +90,7 @@ public:
             nodes.erase(nodes.begin()+smallest);
 
             // Find nextSmallest node
-            for( int i=1; i < nodes.size(); i++) {
+            for( int i=1; i < (int)(nodes.size()); i++) {
                 cout << "Node " << i+1 << ": " << nodes.at(i).getData() << "\n"; 
                 // Find the smallest node by key (weight)
                 if( nodes.at(i).getKey() < nodes.at(nextSmallest).getKey()) {
@@ -117,7 +116,7 @@ public:
             nodeCount++;
             cout << "Inserting a new node with weight of " << newNode.getKey() << "\n";
         }
-        cout << "numNodes: " << nodes.size() << "\n";
+        cout << "numNodes: " << (int)(nodes.size()) << "\n";
         root = &(nodes.at(0));
         //nodes.clear();
         //delete nodes;
