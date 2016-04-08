@@ -3,7 +3,6 @@
  * Robert Blake
  * Matthew Mannix
  */
-#define DEBUG
 
 #include <string>
 #include <fstream>
@@ -29,8 +28,6 @@ int main() {
     
     /* Build the tree */
     HuffmanTree tree = HuffmanTree(fileName);
-    
-    //tree.print();
     
     /* Get the next fileName  */
     cout << "Please enter the name of the file to encode or decode: ";

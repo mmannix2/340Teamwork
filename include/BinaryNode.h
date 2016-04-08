@@ -47,13 +47,13 @@ public:
     }
     
     //Child BinaryNode setters & getters
-    void setLeft(BinaryNode* l) {
+    void setLeft(BinaryNode<Key, T>* l) {
         left = l;
     }
     BinaryNode* getLeft() {
         return left;
     }
-    void setRight(BinaryNode* r) {
+    void setRight(BinaryNode<Key, T>* r) {
         right = r;
     }
     BinaryNode* getRight() {
@@ -63,7 +63,9 @@ public:
     /* Returns TRUE if both left and right
      * nodes are NULL, otherwise FALSE */
     bool isLeaf() {
-        return ( (right==NULL) && (left==NULL) );
+        //cout << right << "\n";
+        //cout << left << "\n";
+        return ( (right == 0) && (left == 0) );
     }
 };
 #endif

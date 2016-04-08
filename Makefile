@@ -9,4 +9,7 @@ lab5 : $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o executable
 
 test : testMain.cpp $(DEPS)
-	$(CC) $(LFLAGS) $(OBJS) -o test
+	$(CC) $(LFLAGS) testMain.cpp $(DEPS) -o test
+
+clean :
+	$(RM) executable test
