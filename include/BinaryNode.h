@@ -19,27 +19,15 @@ private:
     BinaryNode* right;
 
 public:
-    /* Method Prototypes I guess
-        I don't think we need prototypes because this is a header file so
-        everything is declared inline implicitly. I think... -Matt
-
-        BinaryNode(Key, T);
-        void setKey(Key);
-        T getKey();
-        void setData(T);
-        T getData();
-
-        void setLeft(BinaryNode*);
-        BinaryNode* getLeft();
-        void setRight(BinaryNode*);
-        BinaryNode* getRight();
-        bool isLeaf();
-    */
-
-
     BinaryNode(Key k, T d) {
         key = k;
         data = d;
+        left = NULL;
+        right = NULL;
+    }
+    
+    /* Default constructor for making an array */
+    BinaryNode() {
         left = NULL;
         right = NULL;
     }

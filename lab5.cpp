@@ -1,7 +1,5 @@
 /* CPSC 340
- * Lab #5 - BinaryNode.h
- * Compression and Decompression using Huffman Codes
- * A Node to be used within a Binary Tree
+ * Lab #5 - lab5.cpp
  * Robert Blake
  * Matthew Mannix
  */
@@ -9,15 +7,12 @@
 
 #include <string>
 #include <fstream>
-#include <sstream>
 #include <iostream>
 
-#include "HuffmanTree.h"
-#include "BinaryNode.h"
+#include "include/HuffmanTree.h"
 using namespace std;
 
 /* Function Prototypes */
-HuffmanTree buildTree( string );
 void encode( string );
 void decode( string );
 string getFileExt( string );
@@ -25,16 +20,17 @@ string getFileBasename( string );
 
 int main() {
     string fileName;
-    HuffmanTree tree;
     ofstream outFile;
-
+     
     /* Get fileName */
     cout << "Please enter the name of the weights file: ";
     getline(cin, fileName);
     cout << "\n";
     
     /* Build the tree */
-    tree = buildTree(fileName);
+    HuffmanTree tree = HuffmanTree(fileName);
+    
+    //tree.print();
     
     /* Get the next fileName  */
     cout << "Please enter the name of the file to encode or decode: ";
@@ -48,7 +44,7 @@ int main() {
         #ifdef DEBUG
         cout << "Decoding " << fileName << ".\n";
         #endif
-        //decode(fileName);
+        decode(fileName);
     }
     else { //file is plain text
         #ifdef DEBUG
@@ -58,42 +54,6 @@ int main() {
     }
 
     return 0;
-}
-
-HuffmanTree buildTree( string weightsFileName ) {
-    ifstream weightsFile;
-    HuffmanTree tree = HuffmanTree();
-    
-    string tmp;		// holds a line in weights file 
-    stringstream ss;    // Using to convert string to int
-    char c; 		
-    int weight;
-    
-    /* Open weightsFile */
-    weightsFile.open( weightsFileName.c_str() ); 
-    
-    while(getline(weightsFile, tmp)) {
-        #ifdef DEBUG
-        cout << "tmp: " + tmp  + "\n";
-        #endif
-        
-        c = tmp.at(0); 	
-        
-        /* Convert string to int */
-        ss << tmp.substr(2);
-        ss >> weight;
-        
-        /* Clean out the buffer */
-        ss.str("");
-        ss.clear();
-        
-        tree.insert(weight, c);
-
-    }
-    //Close weightsFile
-    weightsFile.close();
-    
-    return tree;
 }
 
 void encode(string fileName) {
