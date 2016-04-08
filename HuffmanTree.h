@@ -3,9 +3,10 @@
 #define _HUFFMANTREE_H_INCLUDED
 
 #include <iostream>
-#include <typeinfo>
 #include <fstream>
 #include <sstream>
+#include <typeinfo>
+#include <vector>
 using namespace std;
 
 #include "BinaryNode.h"
@@ -13,80 +14,118 @@ using namespace std;
 
 class HuffmanTree {
 
-/*
-    struct leaf {
-        int weight;
-        char tag;
-    };
-*/
-
 private:
     BinaryNode<int, char>* root;
     int nodeCount;
     int leafCount;
-    Queue< BinaryNode<int,char> > nodes;
 
 public:
+    /*
     HuffmanTree(int totalLeaves){
         root = new BinaryNode<int, char>(0, '\0');
         //nodes = ; 
         nodeCount = 1;
         leafCount = 0;
     }
-    
-    HuffmanTree(string fileName) {
-        ifstream inFile;
-        inFile.open(fileName.c_str());
+    */
 
-        nodes = Queue< BinaryNode<int, char> >();
+    /*  Constructs a HuffmanTree from a given fileName. */
+    /*  I'm sure there are ways to clean this up, but this works for now.
+        It uses a vector which is like C++'s version of an ArrayList instead
+        of a queue because I was hving trouble getting the queue to work right.
+        After the HuffmanTree is built, the vector of BinaryNodes is no longer
+        required. */
+    /* TODO Remove debug output & clear up code. */
+    HuffmanTree(string fileName) {
+        vector< BinaryNode<int, char> > nodes;
+        ifstream weightsFile;
         string temp;
-        stringstream ss;
+        int nodeCount = 0;
+        int leafCount = 0;
+
+        // Get all nodes from weightsFile
+        weightsFile.open(fileName.c_str());
         
-        while(getline(inFile, temp)) {
-            char character = temp.at(0);
+        while(getline(weightsFile, temp)) {
+            #ifdef DEBUG
+            cout << "thisLine: " << temp << "\n";
+            #endif
+            // Read in weight and value
+            stringstream ss;
             int weight;
             ss << temp.substr(2);
             ss >> weight;
-
-            nodes.push(BinaryNode<int, char>(weight, character));
+            char value = temp.at(0);
             
-            ss.clear();
+            // Make newNode with weight and value
+            BinaryNode<int, char>* newNode = new BinaryNode<int, char>(weight, value);
+            
+            // Add newNode to nodes vector
+            nodes.push_back(*newNode);
+            nodeCount++;
+            leafCount++;
         }
+        
+        cout << "numNodes: " << nodes.size() << "\n";
 
-        cout << "Nodes have been read in.\n";
+        // Combine nodes into tree
+        while( nodes.size() > 1) {
+            cout << "numNodes: " << nodes.size() << "\n";
+            
+            int smallest = 0;
+            int nextSmallest = 0;
+            
+            // Find smallest node
+            for( int i=1; i < nodes.size(); i++) {
+                cout << "Node " << i+1 << ": " << nodes.at(i).getData() << "\n"; 
+                // Find the smallest node by key (weight)
+                if( nodes.at(i).getKey() < nodes.at(smallest).getKey()) {
+                    //cout << thisNode->getKey() << " < " << smallest->getKey();
+                    cout << "\n" << "smallest -> thisNode.\n";
+                    // Swap smallest and thisNode
+                    smallest = i;
+                }
+            }
+            
+            BinaryNode<int, char> smallestNode = nodes.at(smallest);
+            nodes.erase(nodes.begin()+smallest);
+
+            // Find nextSmallest node
+            for( int i=1; i < nodes.size(); i++) {
+                cout << "Node " << i+1 << ": " << nodes.at(i).getData() << "\n"; 
+                // Find the smallest node by key (weight)
+                if( nodes.at(i).getKey() < nodes.at(nextSmallest).getKey()) {
+                    //cout << thisNode->getKey() << " < " << smallest->getKey();
+                    cout << "\n" << "nextSmallest -> thisNode.\n";
+                    // Swap smallest and thisNode
+                    nextSmallest = i;
+                }
+            }
+            
+            BinaryNode<int, char> nextSmallestNode = nodes.at(nextSmallest);
+            nodes.erase(nodes.begin()+nextSmallest);
+
+            cout << "Smallest Node: " << smallestNode.getData();
+            cout << " weight: " << smallestNode.getKey() << "\n";
+            cout << "Next Smallest Node: " << nextSmallestNode.getData();
+            cout << " weight: " << nextSmallestNode.getKey() << "\n";
         
-        sortQueue(nodes);
-        
-        //Add nodes to tree
-        for(int i=0; i<nodes.get_size(); i++) {
-            cout << "Node " << i+1 << ": " << nodes.pop().getData() << "\n";
+            // Replace smallestNode and nextSmallestNode with a new node
+            BinaryNode<int, char> newNode = BinaryNode<int, char>();//('\0', -1);
+            newNode.setKey(smallestNode.getKey() + nextSmallestNode.getKey());
+            nodes.insert(nodes.begin(), newNode);
+            nodeCount++;
+            cout << "Inserting a new node with weight of " << newNode.getKey() << "\n";
         }
+        cout << "numNodes: " << nodes.size() << "\n";
+        root = &(nodes.at(0));
+        //nodes.clear();
+        //delete nodes;
     }
-    
-    void sortQueue(const Queue< BinaryNode<int, char> >& queue) {
-        cout << "Sorting...\n";
-    }
-    
-    /* Stages the leaves before adding them to tree */
-    /*
-    void addLeaf(const int& k, const char& d) {
-        
-        BinaryNode<int, char> * tmpNode = new BinaryNode<int, char>;
-        nodes -> key = k;
-        nodes -> data = d;
 
-        nodes[leafCount] = tmpNode;
-
-#ifdef DEBUG
-        cout << "Leaves: " << leafCount << endl;
-        cout << tmpNode << endl;
-#endif
-        leafCount++;
-
-        return;
-    }
-    */
-
+#ifdef OLD_CODE
+    /*  this function is no longer needed when the HuffmanTree(string) 
+        constuctor is used. */
     /* Sorts all the nodes */
     /*
     void sortNodes() {
@@ -108,78 +147,17 @@ public:
         }
     }
     */
-
-    void insert(const int& k, const char& d) {
-        #ifdef DEBUG
-        cout << "Inserting " << d << " with weight " << k << ".\n";
-        #endif
-        //Make a new BinaryNode
-        BinaryNode<int, char> newNode = BinaryNode<int, char>(k, d);
-        BinaryNode<int, char>* tempNode;
-
-        //Insert newNode
-        if(root->getKey() == 0) {
-            #ifdef DEBUG
-            cout << "\tTree is empty.\n";
-            cout << "\tAdding node left of root.\n";
-            #endif
-
-            root->setLeft( &newNode );      //Set newNode as root's left child
-            root->setKey(newNode.getKey()); //Change root's key
-
-        } else {
-            #ifdef DEBUG
-            cout << "\tTree is not empty.\n";
-            #endif
-
-            /* If root's right child isn't empty */
-            if(root->getRight() != NULL) {
-                #ifdef DEBUG
-                cout << "\tCreating new Node.\n";
-                #endif
-
-                tempNode = new BinaryNode<int, char>(0, '\0');  //Make a new node
-                tempNode->setLeft(root);
-                root = tempNode;
-            }
-
-            //Set newNode as root's right child
-            #ifdef DEBUG
-            cout << "\tAdding node right of root.\n";
-            #endif
-            root->setRight( &newNode );
-            //Change root's key to the sum of its children's keys.
-            root->setKey(root->getLeft()->getKey() + newNode.getKey());
-        }
-
-        //TODO Add some sort error exception for
-        // weights that exceed 100 weightsFileError?
-
-        nodeCount++;
+#endif 
+    /*  returns the total number of leaves in this HuffmanTree 
+        A leaf has no children and will have both a weight and value */
+    int getLeafCount() {
+        return leafCount;
     }
     
-    void print() {
-        //TODO Fix print().
-        BinaryNode<int, char>* temp = root;
-        while(temp->getLeft()->isLeaf()) {
-            //Print right child
-            cout << "Weight: " << temp->getRight()->getKey() << endl;
-            cout << "Char: " << temp->getRight()->getData() << endl;
-            //Move temp
-            temp = temp->getLeft();
-        }
-
-        if(temp->getLeft() != NULL) {
-            //Print left child
-            cout << "Weight: " << temp->getLeft()->getKey() << endl;
-            cout << "Char: " << temp->getLeft()->getData() << endl;
-        }
-
-        //cout << "root key: " << root->getKey() << endl;
-        //cout << "root data: " << root->getData() << endl;
-    }
-
-    int getSize() {
+    /*  returns the total number of nodes in this HuffmanTree
+        A node is any BinaryNode that exists in the HuffmanTree.
+        A node may have children xor a value, but will always have a weight. */
+    int getNodeCount() {
         return nodeCount;
     }
 };
