@@ -57,30 +57,34 @@ public:
             char value = temp.at(0);
             
             // Make newNode with weight and value
-            BinaryNode<int, char>* newNode = new BinaryNode<int, char>(weight, value);
+            BinaryNode<int, char>* newNode = new BinaryNode<int, char>(
+                weight, value);
             
             // Add newNode to nodes vector
             nodes.push_back(*newNode);
             nodeCount++;
             leafCount++;
         }
-        
-        cout << "numNodes: " << (int)(nodes.size()) << "\n";
-
         // Combine nodes into tree
         while( (int)(nodes.size()) > 1) {
+            #ifdef DEBUG
             cout << "numNodes: " << (int)(nodes.size()) << "\n";
+            #endif
             
             int smallest = 0;
             int nextSmallest = 0;
             
             // Find smallest node
             for( int i=1; i < (int)(nodes.size()); i++) {
-                cout << "Node " << i+1 << ": " << nodes.at(i).getData() << "\n"; 
+                #ifdef DEBUG
+                cout << "Node " << i+1 << ": ";
+                cout << nodes.at(i).getData() << "\n"; 
+                #endif
                 // Find the smallest node by key (weight)
                 if( nodes.at(i).getKey() < nodes.at(smallest).getKey()) {
-                    //cout << thisNode->getKey() << " < " << smallest->getKey();
+                    #ifdef DEBUG
                     cout << "\n" << "smallest -> thisNode.\n";
+                    #endif
                     // Swap smallest and thisNode
                     smallest = i;
                 }
@@ -91,11 +95,15 @@ public:
 
             // Find nextSmallest node
             for( int i=1; i < (int)(nodes.size()); i++) {
-                cout << "Node " << i+1 << ": " << nodes.at(i).getData() << "\n"; 
+                #ifdef DEBUG
+                cout << "Node " << i+1 << ": ";
+                cout << nodes.at(i).getData() << "\n"; 
+                #endif
                 // Find the smallest node by key (weight)
                 if( nodes.at(i).getKey() < nodes.at(nextSmallest).getKey()) {
-                    //cout << thisNode->getKey() << " < " << smallest->getKey();
+                    #ifdef DEBUG
                     cout << "\n" << "nextSmallest -> thisNode.\n";
+                    #endif
                     // Swap smallest and thisNode
                     nextSmallest = i;
                 }
@@ -103,21 +111,29 @@ public:
             
             BinaryNode<int, char> nextSmallestNode = nodes.at(nextSmallest);
             nodes.erase(nodes.begin()+nextSmallest);
-
+            
+            #ifdef DEBUG
             cout << "Smallest Node: " << smallestNode.getData();
             cout << " weight: " << smallestNode.getKey() << "\n";
             cout << "Next Smallest Node: " << nextSmallestNode.getData();
             cout << " weight: " << nextSmallestNode.getKey() << "\n";
-        
+            #endif
+            
             // Replace smallestNode and nextSmallestNode with a new node
             BinaryNode<int, char> newNode = BinaryNode<int, char>();//('\0', -1);
             newNode.setKey(smallestNode.getKey() + nextSmallestNode.getKey());
             nodes.insert(nodes.begin(), newNode);
             nodeCount++;
-            cout << "Inserting a new node with weight of " << newNode.getKey() << "\n";
+            #ifdef DEBUG
+            cout << "Inserting a new node with weight of ";
+            cout << newNode.getKey() << "\n";
+            #endif
         }
+        #ifdef DEBUG
         cout << "numNodes: " << (int)(nodes.size()) << "\n";
+        #endif
         root = &(nodes.at(0));
+        //TODO Consider deleting nodes to free up memory
         //nodes.clear();
         //delete nodes;
     }
