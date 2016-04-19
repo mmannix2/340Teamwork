@@ -10,3 +10,6 @@ lab5 : $(OBJS)
 
 test : testMain.cpp $(DEPS)
 	$(CC) $(LFLAGS) $(OBJS) -o test
+
+clean : 
+	$(RM) executable test *.h.gch
