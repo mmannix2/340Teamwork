@@ -130,12 +130,12 @@ public:
         #endif
         root = &(nodes.at(0));
         //TODO Consider deleting nodes to free up memory
-        //nodes.clear();
+        nodes.clear();
         //delete nodes;
     }
 
     /*  returns the binary sequence that corresponds to the given char
-     *  TODO Right now just returns 1 for every char; fix this.
+     *  TODO Right now just returns 1 for every char.
      */
     string getEncoding( char thisChar) {
         string encoding = "";
