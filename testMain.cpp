@@ -27,8 +27,9 @@ int main() {
     cout << "\n";
     
     /* Build the tree */
-    HuffmanTree tree = buildTree(fileName);
-    //tree.print();
+    HuffmanTree tree = HuffmanTree(fileName);
+    
+    tree.print();
     
     return 0;
 }

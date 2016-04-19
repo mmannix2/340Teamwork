@@ -55,6 +55,14 @@ public:
         return right;
     }
     
+    bool hasLeft() {
+        return left != NULL;
+    }
+
+    bool hasRight() {
+        return right != NULL;
+    }
+    
     /* Returns TRUE if both left and right
      * nodes are NULL, otherwise FALSE */
     bool isLeaf() {

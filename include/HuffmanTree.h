@@ -2,6 +2,8 @@
 #ifndef _HUFFMANTREE_H_INCLUDED
 #define _HUFFMANTREE_H_INCLUDED
 
+#define CONST_DEBUG
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -19,15 +21,6 @@ private:
     int leafCount;
 
 public:
-    /*
-    HuffmanTree(int totalLeaves){
-        root = new BinaryNode<int, char>(0, '\0');
-        //nodes = ; 
-        nodeCount = 1;
-        leafCount = 0;
-    }
-    */
-
     /*  Constructs a HuffmanTree from a given fileName. */
     /*  I'm sure there are ways to clean this up, but this works for now.
         It uses a vector which is like C++'s version of an ArrayList instead
@@ -46,7 +39,7 @@ public:
         weightsFile.open(fileName.c_str());
         
         while(getline(weightsFile, temp)) {
-            #ifdef DEBUG
+            #ifdef CONST_DEBUG
             cout << "thisLine: " << temp << "\n";
             #endif
             // Read in weight and value
@@ -67,7 +60,7 @@ public:
         }
         // Combine nodes into tree
         while( (int)(nodes.size()) > 1) {
-            #ifdef DEBUG
+            #ifdef CONST_DEBUG
             cout << "numNodes: " << (int)(nodes.size()) << "\n";
             #endif
             
@@ -76,13 +69,13 @@ public:
             
             // Find smallest node
             for( int i=1; i < (int)(nodes.size()); i++) {
-                #ifdef DEBUG
+                #ifdef CONST_DEBUG
                 cout << "Node " << i+1 << ": ";
                 cout << nodes.at(i).getData() << "\n"; 
                 #endif
                 // Find the smallest node by key (weight)
                 if( nodes.at(i).getKey() < nodes.at(smallest).getKey()) {
-                    #ifdef DEBUG
+                    #ifdef CONST_DEBUG
                     cout << "\n" << "smallest -> thisNode.\n";
                     #endif
                     // Swap smallest and thisNode
@@ -95,13 +88,13 @@ public:
 
             // Find nextSmallest node
             for( int i=1; i < (int)(nodes.size()); i++) {
-                #ifdef DEBUG
+                #ifdef CONST_DEBUG
                 cout << "Node " << i+1 << ": ";
                 cout << nodes.at(i).getData() << "\n"; 
                 #endif
                 // Find the smallest node by key (weight)
                 if( nodes.at(i).getKey() < nodes.at(nextSmallest).getKey()) {
-                    #ifdef DEBUG
+                    #ifdef CONST_DEBUG
                     cout << "\n" << "nextSmallest -> thisNode.\n";
                     #endif
                     // Swap smallest and thisNode
@@ -112,7 +105,7 @@ public:
             BinaryNode<int, char> nextSmallestNode = nodes.at(nextSmallest);
             nodes.erase(nodes.begin()+nextSmallest);
             
-            #ifdef DEBUG
+            #ifdef CONST_DEBUG
             cout << "Smallest Node: " << smallestNode.getData();
             cout << " weight: " << smallestNode.getKey() << "\n";
             cout << "Next Smallest Node: " << nextSmallestNode.getData();
@@ -122,14 +115,17 @@ public:
             // Replace smallestNode and nextSmallestNode with a new node
             BinaryNode<int, char> newNode = BinaryNode<int, char>();//('\0', -1);
             newNode.setKey(smallestNode.getKey() + nextSmallestNode.getKey());
+            newNode.setLeft(&smallestNode);
+            newNode.setRight(&nextSmallestNode);
+
             nodes.insert(nodes.begin(), newNode);
             nodeCount++;
-            #ifdef DEBUG
+            #ifdef CONST_DEBUG
             cout << "Inserting a new node with weight of ";
             cout << newNode.getKey() << "\n";
             #endif
         }
-        #ifdef DEBUG
+        #ifdef CONST_DEBUG
         cout << "numNodes: " << (int)(nodes.size()) << "\n";
         #endif
         root = &(nodes.at(0));
@@ -138,31 +134,29 @@ public:
         //delete nodes;
     }
 
-#ifdef OLD_CODE
-    /*  this function is no longer needed when the HuffmanTree(string) 
-        constuctor is used. */
-    /* Sorts all the nodes */
-    /*
-    void sortNodes() {
-        BinaryNode<int, char> * temp;
-        */
-        /* assume first one is sorted, i starts at 1 */
-        /*
-        for(int i=1; i < leafCount; i++) {
-            for(int j=i; j > 0; j--) {
-                if(nodes[j].key < nodes[j-1].key) {
-                    */
-                    /* swap the values */
-                    /*
-                    temp = nodes[j];
-                    nodes[j] = nodes[j-1];
-                    nodes[j-1] = temp;
-                }
-            }
+    /*  returns the binary sequence that corresponds to the given char
+     *  TODO Right now just returns 1 for every char; fix this.
+     */
+    string getEncoding( char thisChar) {
+        string encoding = "";
+        
+        BinaryNode<int, char>* temp = root;
+        
+        if(temp->getRight()->getData() == thisChar) {
+            //cout << "Root->right: " << root->getRight()->getData() << "\n";
+            encoding += "1";
+            cout << "Match found.\n";
         }
+        else {
+            encoding += "0";
+            cout << "Match not found.\n";
+        }
+
+        encoding = "1"; 
+        cout << "thisChar: " << thisChar << " enc: " << encoding << "\n";
+        return encoding;
     }
-    */
-#endif 
+
     /*  returns the total number of leaves in this HuffmanTree 
         A leaf has no children and will have both a weight and value */
     int getLeafCount() {
@@ -174,6 +168,48 @@ public:
         A node may have children xor a value, but will always have a weight. */
     int getNodeCount() {
         return nodeCount;
+    }
+
+    void print() {
+        cout << "Root:\n\tKey: " << root->getKey();
+        cout << " Data: " << root->getData() << "\n";
+        
+        /*
+        if(root->hasRight()) {
+            cout << "\tRoot has right!\n";
+            print(root->getRight());
+        }
+        else {
+            cout << "\tRoot does NOT have right!!!\n";
+        }
+        */
+        if(root->hasLeft()) {
+            cout << "\tRoot has left!\n";
+            print(root->getLeft());
+        }
+        else {
+            cout << "\tRoot does NOT have left!!!\n";
+        }
+    }
+
+    void print(BinaryNode<int, char>* node) {
+        cout << "Node:\n\tKey: " << node->getKey();
+        cout << " Data: " << node->getData() << "\n";
+        
+        if(node->hasRight()) {
+            cout << "\tNode has right!\n";
+            print(node->getRight());
+        }
+        else {
+            cout << "\tNode does NOT have right!!!\n";
+        }
+        if(node->hasLeft()) {
+            cout << "\tNode has left!\n";
+            print(node->getLeft());
+        }
+        else {
+            cout << "\tNode does NOT have left!!!\n";
+        }
     }
 };
 #endif

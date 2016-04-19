@@ -1,4 +1,5 @@
 /* Compression and Decompression using Huffman Codes */
+#define DEBUG
 
 #include <string>
 #include <fstream>
@@ -8,8 +9,8 @@
 using namespace std;
 
 /* Function Prototypes */
-void encode( string );
-void decode( string );
+void encode( HuffmanTree&, string );
+void decode( HuffmanTree&, string );
 string getFileExt( string );
 string getFileBasename( string );
 
@@ -19,7 +20,8 @@ int main() {
      
     /* Get fileName */
     cout << "Please enter the name of the weights file: ";
-    getline(cin, fileName);
+    //getline(cin, fileName);
+    fileName = "files/weights";
     cout << "\n";
     
     /* Build the tree */
@@ -29,7 +31,8 @@ int main() {
     
     /* Get the next fileName  */
     cout << "Please enter the name of the file to encode or decode: ";
-    getline(cin, fileName);
+    //getline(cin, fileName);
+    fileName = "files/test.txt";
     cout << "\n";
     
     /* encode or decode the new file*/
@@ -39,19 +42,19 @@ int main() {
         #ifdef DEBUG
         cout << "Decoding " << fileName << ".\n";
         #endif
-        decode(fileName);
+        decode(tree, fileName);
     }
     else { //file is plain text
         #ifdef DEBUG
         cout << "Encoding " << fileName << ".\n";
         #endif
-        encode(fileName);
+        encode(tree, fileName);
     }
 
     return 0;
 }
 
-void encode(string fileName) {
+void encode(HuffmanTree& tree, string fileName) {
     //TODO turn plain text into encoded binary. Right now it just reads the
     //input in and stores it into a .enc file
     ifstream inFile;
@@ -63,16 +66,20 @@ void encode(string fileName) {
     inFile.open(fileName.c_str());
     outFile.open(outFileName.c_str(), std::ofstream::out);
 
+    
+    tree.print();
+    
     while(inFile.good()) {
         thisChar = inFile.get();
         //Convert thisChar to binary
-        outFile << thisChar;
+        //outFile << tree.getEncoding(thisChar);
+        //outFile << thisChar;
     }
     outFile << "\n";
     outFile.close();
 }
 
-void decode(string fileName) {
+void decode(HuffmanTree& tree, string fileName) {
     ifstream encodedFile;
     encodedFile.open(fileName.c_str());
     
