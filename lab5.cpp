@@ -10,7 +10,10 @@
 #include <vector>
 
 #include "include/HuffmanTree.h"
-#define DEBUG
+#define DEBUG 
+#define DEBUG_make_weights
+#define LOADFILES
+
 using namespace std;
 
 /* Using to count appearances of a char */
@@ -28,44 +31,48 @@ vector<charTuple> make_weights(string);
 
 
 int main() {
-    string fileName;
+    string weightsFile, codeFile, compressFile;
     ofstream outFile;
-    fileName = "files/weights";
+
+#ifdef LOADFILES
+    weightsFile = "files/weights";
+    codeFile = "files/test.txt";
+    compressFile = 
+#endif
 
      
-#ifndef DEBUG
+#ifndef LOADFILES 
     /* Get fileName */
     cout << "Please enter the name of the weights file: ";
-    getline(cin, fileName);
+    getline(cin, weightsFile);
     cout << "\n";
 #endif
     
     /* Build the tree */
-    HuffmanTree tree = HuffmanTree(fileName);
+    HuffmanTree tree = HuffmanTree(weightsFile);
     
-#ifndef DEBUG
+#ifndef LOADFILES
     /* Get the next fileName  */
     cout << "Please enter the name of the file to encode or decode: ";
-    getline(cin, fileName);
+    getline(cin, codeFile);
     cout << "\n";
 #endif
 
-    fileName = "files/test.txt";
     
     /* encode or decode the new file*/
     /* I don't know a good way to determine if the new file is encoded or not.
        so I am assuming an encoded file will end with .enc */
-    if(getFileExt(fileName)=="enc") { //If new file is encoded
+    if(getFileExt(codeFile)=="enc") { //If new file is encoded
         #ifdef DEBUG
-        cout << "Decoding " << fileName << ".\n";
+        cout << "Decoding " << codeFile << ".\n";
         #endif
-        decode(fileName);
+        decode(codeFile);
     }
     else { //file is plain text
         #ifdef DEBUG
-        cout << "Encoding " << fileName << ".\n";
+        cout << "Encoding " << codeFile << ".\n";
         #endif
-        encode(fileName);
+        encode(codeFile);
     }
 
     return 0;
@@ -128,7 +135,7 @@ vector<charTuple> make_weights(string fileName) {
 
 
     vector<charTuple> charFreq;
-#ifdef DEBUG
+#ifdef DEBUG_make_weights
     cout << "*\033[1m*************************************" << endl;
     cout << "We're in the make_weights function now" << endl;
     cout << "**************************************\033[0m" << endl;
@@ -138,11 +145,11 @@ vector<charTuple> make_weights(string fileName) {
         cout << line << endl;
         /* Loop through each character in line */
         for(char& c : line) {
-#ifdef DEBUG
+#ifdef DEBUG_make_weights
             cout << "Found char: " << c << endl;
 #endif
             if(firstChar) {
-#ifdef DEBUG
+#ifdef DEBUG_make_weights
                 cout << "\tAdding the first character: " << c << endl;
 #endif
                 charTuple * tmp = new charTuple;
@@ -157,7 +164,7 @@ vector<charTuple> make_weights(string fileName) {
                 for(charTuple& x : charFreq) {
                     if(x.letter == c) {
                         x.count++;
-#ifdef DEBUG
+#ifdef DEBUG_make_weights
                         cout << "\tHave it!\tCount: " << x.count << endl;
 #endif
                         haveIt = true;
@@ -166,7 +173,7 @@ vector<charTuple> make_weights(string fileName) {
                 }
 
                 if(!haveIt) {
-#ifdef DEBUG
+#ifdef DEBUG_make_weights
                     cout << "\tAdding to the vector" << endl;
 #endif
                     charTuple * tmp = new charTuple;
@@ -184,7 +191,7 @@ vector<charTuple> make_weights(string fileName) {
 
     /* Done putting the characters and their places */
     /* Print out our frequencies */
-#ifdef DEBUG
+#ifdef DEBUG_make_weights
     cout << "\033[1mCharacter Frequency Vector\033[0m" << endl;
     for(charTuple& x : charFreq) {
         cout << x.letter << "\t" << x.count << endl;
