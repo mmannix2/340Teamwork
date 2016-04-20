@@ -12,7 +12,7 @@
 #include "include/HuffmanTree.h"
 
 #define DEBUG
-#define DEBUG_make_weights
+//#define DEBUG_make_weights
 #define LOADFILES
 
 using namespace std;
@@ -28,9 +28,11 @@ void encode( string );
 void decode( string );
 string getFileExt( string );
 string getFileBasename( string );
-vector<charTuple> make_weights(string);
+
+string make_weights(string);
 
 
+/*** Main Function ***/
 int main() {
     string weightsFile, codeFile, compressFile;
     ofstream outFile;
@@ -38,15 +40,23 @@ int main() {
 #ifdef LOADFILES
     weightsFile = "files/weights";
     codeFile = "files/test.txt";
-    compressFile = "files/test_compress.txt";
+    compressFile = "files/MobyDick.txt";
 #endif
 
+    /* Custom weights from file */
+    weightsFile = make_weights(compressFile);
      
 #ifndef LOADFILES 
     /* Get fileName */
-    cout << "Please enter the name of the weights file: ";
+    cout << "Please enter the name of the weights file";
+    cout << "or a .txt file to get custom weights: ";
     getline(cin, weightsFile);
     cout << "\n";
+
+
+    if(getFileExt(weightsFile) == "txt") {
+        weightsFile = make_weights(compressFile);
+    }
 #endif
     
     /* Build the tree */
@@ -75,6 +85,7 @@ int main() {
         #endif
         encode(codeFile);
     }
+
 
     return 0;
 }
@@ -127,9 +138,19 @@ string getFileBasename(string fileName) {
 /**************************
  * Functions for problem 2 *
  * ************************/
-vector<charTuple> make_weights(string fileName) {
+
+/* Takes in a file name and calculates the frequency
+ * of each letter and saves a weights file as [filename]_weights
+ *
+ * Returns string name of weights file
+ */
+string make_weights(string fileName) {
     fstream compress;
     compress.open(fileName);
+
+    string weights = getFileBasename(fileName) + "_weights";
+    ofstream foundWeights;
+
     string line;
     bool firstChar = true;      // allows us to populate the vector 
     bool haveIt = false;
@@ -143,7 +164,6 @@ vector<charTuple> make_weights(string fileName) {
 #endif
     /* Loop through each line in file */
     while(getline(compress, line)) {
-        cout << line << endl;
         /* Loop through each character in line */
         for(char& c : line) {
 #ifdef DEBUG_make_weights
@@ -190,6 +210,10 @@ vector<charTuple> make_weights(string fileName) {
         }
     }
 
+    compress.close();
+
+    
+
     /* Done putting the characters and their places */
     /* Print out our frequencies */
 #ifdef DEBUG_make_weights
@@ -199,5 +223,13 @@ vector<charTuple> make_weights(string fileName) {
     }
 #endif
 
-    return charFreq;
+    foundWeights.open(weights);
+
+    for(charTuple& x : charFreq) {
+        foundWeights << x.letter << " " << x.count << endl;
+    }
+
+    foundWeights.close();
+
+    return weights;
 }
