@@ -28,10 +28,7 @@ struct charTuple {
 <<<<<<< HEAD
 void encode( HuffmanTree, string );
 void decode( HuffmanTree, string );
-=======
-void encode( string );
-void decode( string, string );
->>>>>>> problem2
+
 string getFileExt( string );
 string getFileBasename( string );
 string make_weights(string);
@@ -72,7 +69,7 @@ int main(int argc, char* argv[]) {
         /* Build the tree */
         HuffmanTree tree = HuffmanTree(weightsFile);
 
-        encode(compressFile);
+        encode(tree, compressFile);
 
     } else if(string(argv[1]) == "-x") {
         if((argc == 4) && (getFileExt(argv[2]) == "hzip") && (getFileExt(argv[3]) == "hcodes")) {
@@ -100,7 +97,10 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        decode(hzipFile, hcodeFile);
+        /* Build the tree */
+        HuffmanTree tree = HuffmanTree(weightsFile);
+
+        decode(tree, hzipFile, hcodeFile);
 
     } else if(string(argv[1]) == "-db") {
         /* Use this alone to debug some stuff. For matt and robert only */
@@ -115,38 +115,6 @@ int main(int argc, char* argv[]) {
         /* Build the tree */
         HuffmanTree tree = HuffmanTree(weightsFile);
      
-<<<<<<< HEAD
-    /* Get fileName */
-    cout << "Please enter the name of the weights file: ";
-    //getline(cin, fileName);
-    fileName = "files/weights";
-    cout << "\n";
-    
-    /* Build the tree */
-    HuffmanTree tree = HuffmanTree(fileName);
-    
-    /* Get the next fileName  */
-    cout << "Please enter the name of the file to encode or decode: ";
-    //getline(cin, fileName);
-    fileName = "files/test.txt";
-    cout << "\n";
-    
-    /* encode or decode the new file*/
-    /* I don't know a good way to determine if the new file is encoded or not.
-       so I am assuming an encoded file will end with .enc */
-    if(getFileExt(fileName)=="enc") { //If new file is encoded
-        #ifdef DEBUG
-        cout << "Decoding " << fileName << ".\n";
-        #endif
-        decode(tree, fileName);
-    }
-    else { //file is plain text
-        #ifdef DEBUG
-        cout << "Encoding " << fileName << ".\n";
-        #endif
-        encode(tree, fileName);
-=======
->>>>>>> problem2
     }
 
     return 0;
@@ -175,11 +143,7 @@ void encode(HuffmanTree tree, string fileName) {
     outFile.close();
 }
 
-<<<<<<< HEAD
-void decode(HuffmanTree tree, string fileName) {
-=======
-void decode(string hzip, string hcodes) {
->>>>>>> problem2
+void decode(HuffmanTree tree, string hzip, string hcodes) {
     ifstream encodedFile;
     encodedFile.open(hzip.c_str());
     
