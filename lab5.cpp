@@ -7,32 +7,50 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #include "include/HuffmanTree.h"
+#define DEBUG
 using namespace std;
+
+/* Using to count appearances of a char */
+struct charTuple {
+    int count;
+    char letter;
+};
 
 /* Function Prototypes */
 void encode( string );
 void decode( string );
 string getFileExt( string );
 string getFileBasename( string );
+vector<charTuple> make_weights(string);
+
 
 int main() {
     string fileName;
     ofstream outFile;
+    fileName = "files/weights";
+
      
+#ifndef DEBUG
     /* Get fileName */
     cout << "Please enter the name of the weights file: ";
     getline(cin, fileName);
     cout << "\n";
+#endif
     
     /* Build the tree */
     HuffmanTree tree = HuffmanTree(fileName);
     
+#ifndef DEBUG
     /* Get the next fileName  */
     cout << "Please enter the name of the file to encode or decode: ";
     getline(cin, fileName);
     cout << "\n";
+#endif
+
+    fileName = "files/test.txt";
     
     /* encode or decode the new file*/
     /* I don't know a good way to determine if the new file is encoded or not.
@@ -96,4 +114,82 @@ string getFileBasename(string fileName) {
     else {
         return fileName;
     }
+}
+
+/**************************
+ * Functions for problem 2 *
+ * ************************/
+vector<charTuple> make_weights(string fileName) {
+    fstream compress;
+    compress.open(fileName);
+    string line;
+    bool firstChar = true;      // allows us to populate the vector 
+    bool haveIt = false;
+
+
+    vector<charTuple> charFreq;
+#ifdef DEBUG
+    cout << "*\033[1m*************************************" << endl;
+    cout << "We're in the make_weights function now" << endl;
+    cout << "**************************************\033[0m" << endl;
+#endif
+    /* Loop through each line in file */
+    while(getline(compress, line)) {
+        cout << line << endl;
+        /* Loop through each character in line */
+        for(char& c : line) {
+#ifdef DEBUG
+            cout << "Found char: " << c << endl;
+#endif
+            if(firstChar) {
+#ifdef DEBUG
+                cout << "\tAdding the first character: " << c << endl;
+#endif
+                charTuple * tmp = new charTuple;
+                tmp->letter = c;
+                tmp->count = 1;
+                charFreq.push_back(*tmp);
+
+                firstChar = false;
+            } else {
+                
+                /* Check if the character is already in our vector */ 
+                for(charTuple& x : charFreq) {
+                    if(x.letter == c) {
+                        x.count++;
+#ifdef DEBUG
+                        cout << "\tHave it!\tCount: " << x.count << endl;
+#endif
+                        haveIt = true;
+                        break;
+                    }               
+                }
+
+                if(!haveIt) {
+#ifdef DEBUG
+                    cout << "\tAdding to the vector" << endl;
+#endif
+                    charTuple * tmp = new charTuple;
+                    tmp->letter = c;
+                    tmp->count = 1;
+                    charFreq.push_back(*tmp);
+
+                    haveIt = false;
+                } else {
+                    haveIt = false;
+                }
+            }
+        }
+    }
+
+    /* Done putting the characters and their places */
+    /* Print out our frequencies */
+#ifdef DEBUG
+    cout << "\033[1mCharacter Frequency Vector\033[0m" << endl;
+    for(charTuple& x : charFreq) {
+        cout << x.letter << "\t" << x.count << endl;
+    }
+#endif
+
+    return charFreq;
 }
