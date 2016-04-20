@@ -7,7 +7,6 @@
 #ifndef _HUFFMANTREE_H_INCLUDED
 #define _HUFFMANTREE_H_INCLUDED
 
-#define DEBUG
 
 #include <iostream>
 #include <fstream>
@@ -29,7 +28,6 @@ private:
             int smallest = 0;
             BinaryNode<int, char>* smallestNode = &nodes.at(0);
              
-            cout << "Finding smallest\n";
             // Find smallest node
             for(BinaryNode<int, char> thisNode : nodes) {
                 #ifdef DEBUG
@@ -49,19 +47,24 @@ private:
             
             //Swap smallestNode with the backNode
             BinaryNode<int, char> backNode = nodes.back();
+            
+            #ifdef DEBUG
             cout << "SmallestNode: " << smallestNode->getData()<< "\n";
             cout << "BackNode: " << backNode.getData() << "\n";
             cout << ".back(): " << nodes.back().getData()<< "\n";
-            
+            #endif
+
             nodes.back().setData( smallestNode->getData() );
             nodes.back().setKey( smallestNode->getKey() );
             
             smallestNode->setData( backNode.getData() );
             smallestNode->setKey( backNode.getKey() );
             
+            #ifdef DEBUG
             cout << "SmallestNode: " << smallestNode->getData()<< "\n";
             cout << "BackNode: " << backNode.getData() << "\n";
             cout << ".back(): " << nodes.back().getData()<< "\n";
+            #endif
             
             backNode = nodes.back();
 
@@ -112,7 +115,6 @@ public:
             cout << "numNodes: " << (int)(nodes.size()) << "\n";
             #endif
             
-            cout << "Finding nextSmallest\n";
             BinaryNode<int, char> smallestNode = getSmallest(nodes);
             nodes.pop_back();
 
