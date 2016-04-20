@@ -10,7 +10,8 @@
 #include <vector>
 
 #include "include/HuffmanTree.h"
-#define DEBUG 
+
+#define DEBUG
 #define DEBUG_make_weights
 #define LOADFILES
 
@@ -37,7 +38,7 @@ int main() {
 #ifdef LOADFILES
     weightsFile = "files/weights";
     codeFile = "files/test.txt";
-    compressFile = 
+    compressFile = "files/test_compress.txt";
 #endif
 
      
