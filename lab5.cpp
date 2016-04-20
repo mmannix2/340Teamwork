@@ -14,6 +14,7 @@
 #define DEBUG
 //#define DEBUG_make_weights
 #define LOADFILES
+#define USEFLAGS
 
 using namespace std;
 
@@ -25,67 +26,91 @@ struct charTuple {
 
 /* Function Prototypes */
 void encode( string );
-void decode( string );
+void decode( string, string );
 string getFileExt( string );
 string getFileBasename( string );
-
 string make_weights(string);
 
 
 /*** Main Function ***/
-int main() {
-    string weightsFile, codeFile, compressFile;
+int main(int argc, char* argv[]) {
+    string weightsFile, compressFile;
+    string hcodeFile, hzipFile;
     ofstream outFile;
 
-#ifdef LOADFILES
-    weightsFile = "files/weights";
-    codeFile = "files/test.txt";
-    compressFile = "files/MobyDick.txt";
-#endif
+    if(argc < 2) {
+        cout << "Proper usage:" << endl;
+        cout << "-c [file].txt\t\t\tCompresses a file" << endl;
+        cout << "-x [file].hzip [file].hcode\tUnzips a file" << endl;
+        cout << "Or for filename prompts:" << endl;
+        cout << "-c" << endl;
+        cout << "-x" << endl;
+        return 1;
 
-    /* Custom weights from file */
-    weightsFile = make_weights(compressFile);
-     
-#ifndef LOADFILES 
-    /* Get fileName */
-    cout << "Please enter the name of the weights file";
-    cout << "or a .txt file to get custom weights: ";
-    getline(cin, weightsFile);
-    cout << "\n";
+    } else if(string(argv[1]) == "-c") {         /* -c compresses a txt file */
+        if((argc == 3) && (getFileExt(argv[2]) == "txt")) {
+            cout << "Compressing "<< argv[2] << "..." << endl;
+            compressFile = argv[2];
+        } else {
+            cout << "Enter the name of a .txt file to compress: ";
+            getline(cin, compressFile);
+            cout << "\n";
 
+            if(!(getFileExt(hzipFile) == "hzip")) {
+                cout << "Please enter valid .txt file." << endl;
+                return 1;
+            }
+        }
 
-    if(getFileExt(weightsFile) == "txt") {
         weightsFile = make_weights(compressFile);
-    }
-#endif
-    
-    /* Build the tree */
-    HuffmanTree tree = HuffmanTree(weightsFile);
-    
-#ifndef LOADFILES
-    /* Get the next fileName  */
-    cout << "Please enter the name of the file to encode or decode: ";
-    getline(cin, codeFile);
-    cout << "\n";
-#endif
 
-    
-    /* encode or decode the new file*/
-    /* I don't know a good way to determine if the new file is encoded or not.
-       so I am assuming an encoded file will end with .enc */
-    if(getFileExt(codeFile)=="enc") { //If new file is encoded
-        #ifdef DEBUG
-        cout << "Decoding " << codeFile << ".\n";
-        #endif
-        decode(codeFile);
-    }
-    else { //file is plain text
-        #ifdef DEBUG
-        cout << "Encoding " << codeFile << ".\n";
-        #endif
-        encode(codeFile);
-    }
+        /* Build the tree */
+        HuffmanTree tree = HuffmanTree(weightsFile);
 
+        encode(compressFile);
+
+    } else if(string(argv[1]) == "-x") {
+        if((argc == 4) && (getFileExt(argv[2]) == "hzip") && (getFileExt(argv[3]) == "hcodes")) {
+            cout << "We're going to unzip a file using: " << argv[2] << " " << argv[3] << endl;
+            hzipFile = argv[2];
+            hcodeFile = argv[3];
+        } else {
+
+            cout << "Enter the name of a .hzip file to unzip: ";
+            getline(cin, hzipFile);
+            cout << "\n";
+
+            if(!(getFileExt(hzipFile) == "hzip")) {
+                cout << "Please enter valid .hzip file to unzip." << endl;
+                return 1;
+            }
+
+            cout << "Enter the name of a .hcode file to interpret: ";
+            getline(cin, hcodeFile);
+            cout << "\n";
+
+            if(!(getFileExt(hzipFile) == "hzip")) {
+                cout << "Please enter valid .hcodes file." << endl;
+                return 1;
+            }
+        }
+
+        decode(hzipFile, hcodeFile);
+
+    } else if(string(argv[1]) == "-db") {
+        /* Use this alone to debug some stuff. For matt and robert only */
+
+        weightsFile = "files/weights";
+        hcodeFile = "files/test.txt";
+        compressFile = "files/MobyDick.txt";
+
+        /* Custom weights from file */
+        weightsFile = make_weights(compressFile);
+        
+        /* Build the tree */
+        HuffmanTree tree = HuffmanTree(weightsFile);
+     
+    }
 
     return 0;
 }
@@ -95,7 +120,8 @@ void encode(string fileName) {
     //input in and stores it into a .enc file
     ifstream inFile;
     ofstream outFile;
-    string outFileName = getFileBasename(fileName) + ".enc";
+    
+    string outFileName = getFileBasename(fileName) + ".hzip";
     char thisChar;
     
     /* Open the files */
@@ -111,9 +137,9 @@ void encode(string fileName) {
     outFile.close();
 }
 
-void decode(string fileName) {
+void decode(string hzip, string hcodes) {
     ifstream encodedFile;
-    encodedFile.open(fileName.c_str());
+    encodedFile.open(hzip.c_str());
     
     //TODO turn plain text into encoded binary
     //This will write to a file.
