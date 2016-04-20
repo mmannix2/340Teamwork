@@ -7,6 +7,8 @@
 #ifndef _HUFFMANTREE_H_INCLUDED
 #define _HUFFMANTREE_H_INCLUDED
 
+#define DEBUG
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -22,7 +24,49 @@ private:
     BinaryNode<int, char>* root;
     int nodeCount;
     int leafCount;
+    
+    BinaryNode<int, char> getSmallest(vector< BinaryNode<int, char> >& nodes) {
+            int smallest = 0;
+            BinaryNode<int, char>* smallestNode = &nodes.at(0);
+             
+            cout << "Finding smallest\n";
+            // Find smallest node
+            for(BinaryNode<int, char> thisNode : nodes) {
+                #ifdef DEBUG
+                cout << "Node : ";
+                cout << thisNode.getData() << "\n"; 
+                #endif
+                // Find the smallest node by key (weight)
+                if( thisNode.getKey() < smallestNode->getKey()) {
+                    #ifdef DEBUG
+                    cout << "\n" << "smallest -> thisNode.\n";
+                    #endif
+                    // Swap smallest and thisNode
+                    smallestNode = &thisNode;
+                }
+            }
+            //Somehow remove smallest from nodes
+            
+            //Swap smallestNode with the backNode
+            BinaryNode<int, char> backNode = nodes.back();
+            cout << "SmallestNode: " << smallestNode->getData()<< "\n";
+            cout << "BackNode: " << backNode.getData() << "\n";
+            cout << ".back(): " << nodes.back().getData()<< "\n";
+            
+            nodes.back().setData( smallestNode->getData() );
+            nodes.back().setKey( smallestNode->getKey() );
+            
+            smallestNode->setData( backNode.getData() );
+            smallestNode->setKey( backNode.getKey() );
+            
+            cout << "SmallestNode: " << smallestNode->getData()<< "\n";
+            cout << "BackNode: " << backNode.getData() << "\n";
+            cout << ".back(): " << nodes.back().getData()<< "\n";
+            
+            backNode = nodes.back();
 
+            return backNode;
+    }
 public:
     /*  Constructs a HuffmanTree from a given fileName. */
     /*  I'm sure there are ways to clean this up, but this works for now.
@@ -61,53 +105,20 @@ public:
             nodeCount++;
             leafCount++;
         }
+        
         // Combine nodes into tree
         while( (int)(nodes.size()) > 1) {
             #ifdef DEBUG
             cout << "numNodes: " << (int)(nodes.size()) << "\n";
             #endif
             
-            int smallest = 0;
-            int nextSmallest = 0;
-            
-            // Find smallest node
-            for( int i=1; i < (int)(nodes.size()); i++) {
-                #ifdef DEBUG
-                cout << "Node " << i+1 << ": ";
-                cout << nodes.at(i).getData() << "\n"; 
-                #endif
-                // Find the smallest node by key (weight)
-                if( nodes.at(i).getKey() < nodes.at(smallest).getKey()) {
-                    #ifdef DEBUG
-                    cout << "\n" << "smallest -> thisNode.\n";
-                    #endif
-                    // Swap smallest and thisNode
-                    smallest = i;
-                }
-            }
-            
-            BinaryNode<int, char> smallestNode = nodes.at(smallest);
-            nodes.erase(nodes.begin()+smallest);
+            cout << "Finding nextSmallest\n";
+            BinaryNode<int, char> smallestNode = getSmallest(nodes);
+            nodes.pop_back();
 
-            // Find nextSmallest node
-            for( int i=1; i < (int)(nodes.size()); i++) {
-                #ifdef DEBUG
-                cout << "Node " << i+1 << ": ";
-                cout << nodes.at(i).getData() << "\n"; 
-                #endif
-                // Find the smallest node by key (weight)
-                if( nodes.at(i).getKey() < nodes.at(nextSmallest).getKey()) {
-                    #ifdef DEBUG
-                    cout << "\n" << "nextSmallest -> thisNode.\n";
-                    #endif
-                    // Swap smallest and thisNode
-                    nextSmallest = i;
-                }
-            }
-            
-            BinaryNode<int, char> nextSmallestNode = nodes.at(nextSmallest);
-            nodes.erase(nodes.begin()+nextSmallest);
-            
+            BinaryNode<int, char> nextSmallestNode = getSmallest(nodes);
+            nodes.pop_back();
+
             #ifdef DEBUG
             cout << "Smallest Node: " << smallestNode.getData();
             cout << " weight: " << smallestNode.getKey() << "\n";
@@ -116,8 +127,8 @@ public:
             #endif
             
             // Replace smallestNode and nextSmallestNode with a new node
-            BinaryNode<int, char> newNode = BinaryNode<int, char>();//('\0', -1);
-            newNode.setKey(smallestNode.getKey() + nextSmallestNode.getKey());
+            BinaryNode<int, char>* newNode = new BinaryNode<int, char>();
+            newNode->setKey(smallestNode.getKey() + nextSmallestNode.getKey());
             #ifdef DEBUG
             cout << "Left: -> ";
             cout << "Char: " << nextSmallestNode.getData() << " ";
@@ -127,29 +138,30 @@ public:
             cout << "Char: " << smallestNode.getData() << " ";
             cout << "Key: " << smallestNode.getKey() << "\n";
             #endif
-            newNode.setLeft(&nextSmallestNode);
-            newNode.setRight(&smallestNode);
-            nodes.insert(nodes.begin(), newNode);
+            newNode->setLeft(&nextSmallestNode);
+            newNode->setRight(&smallestNode);
+            nodes.push_back(*newNode);
             nodeCount++;
+            
             #ifdef DEBUG
             cout << "nodeCount: " << getNodeCount() << "\n";
             cout << "Inserting a new node with weight of ";
-            cout << newNode.getKey() << "\n";
+            cout << newNode->getKey() << "\n";
             #endif
         }
+        
         #ifdef DEBUG
         cout << "numNodes: " << (int)(nodes.size()) << "\n";
         cout << "nodeCount: " << getNodeCount() << "\n";
+        cout << "leafCount: " << getLeafCount() << "\n";
         #endif
-        root = &(nodes.at(0));
-        //TODO Consider deleting nodes to free up memory
-        //nodes.clear();
-        //delete nodes;
+        
+        root = &(nodes.back());
     }
 
     /*  Returns a c string of 1s and 0s that represents the encoding for
         the given char. */
-    char getBitSeq(char c) {
+    string getEncoding(char c) {
         //cout << "c: " << c << "right: " << root->getRight()->getData() << "\n";
         // Right is 1, Left is 0
         if(root != NULL) {

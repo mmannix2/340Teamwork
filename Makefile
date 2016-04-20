@@ -1,9 +1,9 @@
 OBJS = lab5.o
 CC = g++
 DEBUG = -g
-CFLAGS = -Wall -c $(DEBUG)
+CFLAGS = -Wall -c -std=c++11 $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
-DEPS = include/HuffmanTree.h include/BinaryNode.h
+DEPS = include/*.h
 
 default: lab5
 
