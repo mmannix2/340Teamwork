@@ -37,13 +37,25 @@ public:
         key = k;
     }
     Key getKey() {
-        return key;
+        if(this == NULL) {
+            cout << "Key is NULL!\n";
+            return NULL;
+        }
+        else {
+            return key;
+        }
     }
     void setData(T d) {
         data = d;
     }
     T getData() {
-        return data;
+        if(this == NULL) {
+            cout << "Data is NULL!\n";
+            return NULL;
+        }
+        else {
+            return data;
+        }
     }
     
     //Child BinaryNode setters & getters
@@ -60,12 +72,21 @@ public:
         return right;
     }
     
+    bool hasLeft() {
+        return !isLeaf();
+    }
+
+    bool hasRight() {
+        return !isLeaf();
+    }
+
     /* Returns TRUE if both left and right
      * nodes are NULL, otherwise FALSE */
     bool isLeaf() {
         //cout << right << "\n";
         //cout << left << "\n";
-        return ( (right == 0) && (left == 0) );
+        //return ( (right == NULL) && (left == NULL) );
+        return data != '\0';
     }
 };
 #endif

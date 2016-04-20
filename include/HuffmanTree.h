@@ -7,6 +7,7 @@
 #ifndef _HUFFMANTREE_H_INCLUDED
 #define _HUFFMANTREE_H_INCLUDED
 
+#define DEBUG
 
 #include <iostream>
 #include <fstream>
@@ -48,7 +49,7 @@ private:
             //Swap smallestNode with the backNode
             BinaryNode<int, char> backNode = nodes.back();
             
-            #ifdef DEBUG
+            #ifdef DEBUG_SMALLEST
             cout << "SmallestNode: " << smallestNode->getData()<< "\n";
             cout << "BackNode: " << backNode.getData() << "\n";
             cout << ".back(): " << nodes.back().getData()<< "\n";
@@ -60,7 +61,7 @@ private:
             smallestNode->setData( backNode.getData() );
             smallestNode->setKey( backNode.getKey() );
             
-            #ifdef DEBUG
+            #ifdef DEBUG_SMALLEST
             cout << "SmallestNode: " << smallestNode->getData()<< "\n";
             cout << "BackNode: " << backNode.getData() << "\n";
             cout << ".back(): " << nodes.back().getData()<< "\n";
@@ -102,6 +103,8 @@ public:
             // Make newNode with weight and value
             BinaryNode<int, char>* newNode = new BinaryNode<int, char>(
                 weight, value);
+            newNode->setLeft(NULL);
+            newNode->setRight(NULL);
 
             // Add newNode to nodes vector
             nodes.push_back(*newNode);
@@ -131,7 +134,8 @@ public:
             // Replace smallestNode and nextSmallestNode with a new node
             BinaryNode<int, char>* newNode = new BinaryNode<int, char>();
             newNode->setKey(smallestNode.getKey() + nextSmallestNode.getKey());
-            #ifdef DEBUG
+            newNode->setData('\0');
+            
             cout << "Left: -> ";
             cout << "Char: " << nextSmallestNode.getData() << " ";
             cout << "Key: " << nextSmallestNode.getKey() << "\n";
@@ -139,7 +143,7 @@ public:
             cout << "Right: -> ";
             cout << "Char: " << smallestNode.getData() << " ";
             cout << "Key: " << smallestNode.getKey() << "\n";
-            #endif
+            
             newNode->setLeft(&nextSmallestNode);
             newNode->setRight(&smallestNode);
             nodes.push_back(*newNode);
@@ -188,28 +192,25 @@ public:
     }
     
     void print(BinaryNode<int, char>* node) {
-        /*
-        cout << "Node->Left: " << node->getLeft() << "\n";
-        cout << "Node->Right: " << node->getRight() << "\n";
-        */
-        if(node != 0) {
-            if(node->isLeaf()) {
-                cout << "This node is a leaf.\n";
-                cout << "\tChar: " << node->getData() << " "; 
-                cout << "Weight: " << node->getKey() << "\n";
+        if(node->isLeaf()) {
+            cout << "This node is a leaf.\n";
+            cout << "\tChar: " << node->getData() << " "; 
+            cout << "Weight: " << node->getKey() << "\n";
+            return;
+        }
+        else {
+            cout << "This node is NOT a leaf.\n";
+            cout << "\tChar: " << node->getData() << " "; 
+            cout << "Weight: " << node->getKey() << "\n";
+            cout << "\tNode->Left: " << node->getLeft()->getKey() << "\n";
+            cout << "\tNode->Right: " << node->getRight()->getKey() << "\n";
+            // Check to the Right
+            if(node->hasRight()) {
+               print(node->getRight());
             }
-            else {
-                cout << "This node is NOT a leaf.\n";
-                cout << "\tChar: " << node->getData() << " "; 
-                cout << "Weight: " << node->getKey() << "\n";
-                // Check to the Right
-                if(node->getRight() != NULL) {
-                   print(node->getRight());
-                }
-                // Check to the Left
-                if(node->getLeft() != NULL) {
-                    print(node->getLeft());
-                }
+            // Check to the Left
+            if(node->hasLeft()) {
+                print(node->getLeft());
             }
         }
     }
